@@ -1,0 +1,21 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch TypeScript with Nodemon",
+      "type": "node",
+      "request": "launch",
+      "skipFiles": ["<node_internals>/**"],
+      "runtimeExecutable": "nodemon",
+      "runtimeArgs": [
+        "--inspect-brk", // This makes Node.js break immediately before any code is executed.
+        "--loader",
+        "ts-node/esm",
+        "./main.ts"
+      ],
+      "outFiles": ["${workspaceFolder}/build/**/*.js"], // This should point to the compiled JS files
+      "sourceMaps": true, // Ensure source maps are enabled
+      "smartStep": true // Step through TypeScript code directly
+    }
+  ]
+}
