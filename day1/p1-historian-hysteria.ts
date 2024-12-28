@@ -1,7 +1,7 @@
 import { readFileAsString } from "../common.js";
 
-(async () => {
-  const { data, error } = await readFileAsString("../inputs/input1.txt");
+export const p1HistorianHysteria = async () => {
+  const { data, error } = await readFileAsString("./inputs/input1.txt");
 
   if (error) throw error;
 
@@ -17,4 +17,4 @@ import { readFileAsString } from "../common.js";
   }
 
   console.log(sum);
-})();
+};
