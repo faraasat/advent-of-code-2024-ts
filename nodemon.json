@@ -1,0 +1,5 @@
+{
+  "watch": ["**/*.ts"],
+  "exec": "node --inspect --loader ts-node/esm ./main.ts",
+  "ext": "ts"
+}
