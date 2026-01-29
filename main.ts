@@ -2,6 +2,8 @@ import { p1HistorianHysteria } from "./day1/p1-historian-hysteria.ts";
 import { p2HistorianHysteria } from "./day1/p2-historian-hysteria.ts";
 import { p1RedNoseReport } from "./day2/p1-red-nose-report.ts";
 import { p2RedNoseReport } from "./day2/p2-red-nose-report.ts";
+import { p1MullItOver } from "./day3/p1-mull-it-over.ts";
+import { p2MullItOver } from "./day3/p2-mull-it-over.ts";
 
 const logger = (
   day: number,
@@ -36,4 +38,12 @@ const logger = (
   logger(2, 2, "Red-Nose Report");
   await p2RedNoseReport();
   logger(2, 2, "Red-Nose Report", false);
+
+  logger(2, 2, "Mull It Over");
+  await p1MullItOver();
+  logger(2, 2, "Mull It Over", false);
+
+  logger(2, 2, "Mull It Over");
+  await p2MullItOver();
+  logger(2, 2, "Mull It Over", false);
 })();
