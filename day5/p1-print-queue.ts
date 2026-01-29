@@ -1,6 +1,6 @@
 import { readFileAsString } from "../common.js";
 
-export const p1PrintQueue = async () => {
+export const p1PrintQueue = async (shouldReturnIncorrectIndexes = false) => {
   const { data, error } = await readFileAsString("./inputs/input5.txt");
 
   if (error) throw error;
@@ -56,7 +56,7 @@ export const p1PrintQueue = async () => {
   };
 
   const result = list
-    .map((l) => {
+    .map((l, idx) => {
       const LIST_LENGTH = l.length;
 
       const tracker: Array<number> = [];
@@ -73,18 +73,31 @@ export const p1PrintQueue = async () => {
           first = mappingObject.get(val)!;
           continue;
         } else {
-          const searchRes = searchInDepth(first, val, 5);
+          const searchRes = searchInDepth(first, val, 1);
           if (searchRes >= 0) {
             tracker.push(val);
             first = mappingObject.get(val)!;
-          } else return undefined;
+          } else tracker.push(-1);
         }
       }
 
-      if (tracker.includes(-1)) return undefined;
-      else return tracker[Math.floor(tracker.length / 2)];
+      if (!shouldReturnIncorrectIndexes) {
+        if (tracker.includes(-1)) return undefined;
+        else return tracker[Math.floor(tracker.length / 2)];
+      } else {
+        if (tracker.includes(-1) || typeof tracker == undefined) {
+          return idx;
+        } else return undefined;
+      }
     })
     .filter((x) => x !== undefined);
+
+  if (shouldReturnIncorrectIndexes)
+    return {
+      result,
+      list: list.map((x) => x.map((x) => +x)),
+      mappings: mappingObject,
+    };
 
   console.log(result.reduce((acc, val) => (val ? acc + val : acc), 0));
 };
