@@ -1,90 +1,61 @@
-import { readFileAsString } from "../common.js";
+import { p1PrintQueue } from "./p1-print-queue.ts";
 
 export const p2PrintQueue = async () => {
-  const { data, error } = await readFileAsString("./inputs/input5.txt");
+  const { result, list, mappings } = (await p1PrintQueue(true))!;
 
-  if (error) throw error;
+  const checkOrdering = (arr: Array<number>) => {
+    let l = arr;
+    let val = l[0];
+    let valMapping = mappings.get(val)!;
+    let tracker = [val];
 
-  const sections = data!.split("\n\n");
+    for (let i = 1; i < l.length - 1; i++) {
+      const valNext = l[i];
 
-  const mappings = sections[0];
-  const list = sections[1].split("\n").map((x) => x.split(","));
-
-  const START = 11;
-  const END = 99;
-
-  const mappingObject: Map<number, Array<number>> = new Map();
-
-  [...Array(END - START + 1).keys()].forEach((val, i) => {
-    const updVal = val + 11;
-    const re = new RegExp(`${updVal}[|][0-9]{2}`, "g");
-
-    mappings.match(re)?.forEach((x) => {
-      if (!mappingObject.has(updVal))
-        mappingObject.set(updVal, [parseInt(x.split("|")[1])]);
-      else
-        mappingObject.set(updVal, [
-          ...mappingObject.get(updVal)!,
-          parseInt(x.split("|")[1]),
-        ]);
-    });
-  });
-
-  const searchInDepth = (
-    valList: Array<number>,
-    valToFind: number,
-    depth: number
-  ): number => {
-    if (depth === 0) return 0;
-
-    for (let i = 0; i < valList.length; i++) {
-      if (mappingObject.get(valList[i])?.includes(valToFind)) {
-        return valToFind;
+      if (valMapping.includes(valNext)) {
+        tracker.push(valNext);
+        valMapping = mappings.get(valNext)!;
       } else {
-        const sVal = searchInDepth(
-          mappingObject.get(valList[i])!,
-          valToFind,
-          depth - 1
-        );
-
-        if (sVal > -1) return -1;
-        return sVal;
+        return [-1];
       }
     }
 
-    return valToFind;
+    return tracker;
   };
 
-  const result = list
-    .map((l) => {
-      const LIST_LENGTH = l.length;
+  const resp = result.map((res) => {
+    let l = list[res];
+    let val = l[0];
+    let valMapping = mappings.get(val)!;
+    let tracker = [val];
 
-      const tracker: Array<number> = [];
+    for (let i = 1; i < l.length - 1; i++) {
+      const valNext = l[i];
 
-      let first = mappingObject.get(parseInt(l[0]))!;
+      if (valMapping.includes(valNext)) {
+        tracker.push(valNext);
+        valMapping = mappings.get(valNext)!;
+      } else {
+        const updL = l;
+        const temp1 = l[i + 1];
+        updL[i + 1] = l[i];
+        updL[i] = temp1;
+        const res = checkOrdering(updL);
 
-      tracker.push(parseInt(l[0]));
-
-      for (let i = 1; i < LIST_LENGTH; i++) {
-        const val = parseInt(l[i]);
-
-        if (first.includes(val)) {
-          tracker.push(val);
-          first = mappingObject.get(val)!;
-          continue;
+        if (res.includes(-1)) {
+          return -1;
         } else {
-          const searchRes = searchInDepth(first, val, 5);
-          if (searchRes >= 0) {
-            tracker.push(val);
-            first = mappingObject.get(val)!;
-          } else return undefined;
+          return res[Math.floor(res.length / 2)];
         }
       }
+    }
 
-      if (tracker.includes(-1)) return undefined;
-      else return tracker[Math.floor(tracker.length / 2)];
-    })
-    .filter((x) => x !== undefined);
+    return tracker[Math.floor(tracker.length / 2)];
+  });
+  // .filter((x) => x !== -1);
 
-  console.log(result.reduce((acc, val) => (val ? acc + val : acc), 0));
+  // 8747 is too high
+  console.log(resp.reduce((acc, val) => acc + val, 0));
+
+  console.log("here", result, mappings);
 };

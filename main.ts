@@ -8,6 +8,7 @@ import { p1CeresSearch } from "./day4/p1-ceres-search.ts";
 import { p2CeresSearch } from "./day4/p2-ceres-search.ts";
 import { p1PrintQueue } from "./day5/p1-print-queue.ts";
 import { p2PrintQueue } from "./day5/p2-print-queue.ts";
+import { p1WarehouseWoes } from "./day15/p1-warehouse-woes.ts";
 
 const logger = (
   day: number,
@@ -66,4 +67,12 @@ const logger = (
   logger(5, 2, "Print Queue");
   await p2PrintQueue();
   logger(5, 2, "Print Queue", false);
+
+  logger(15, 1, "Warehouse Woes");
+  await p1WarehouseWoes();
+  logger(15, 1, "Warehouse Woes", false);
+
+  // logger(15, 2, "Warehouse Woes");
+  // await p2PrintQueue();
+  // logger(15, 2, "Warehouse Woes", false);
 })();
